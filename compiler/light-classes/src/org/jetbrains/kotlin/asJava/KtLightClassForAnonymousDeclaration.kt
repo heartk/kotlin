@@ -25,9 +25,10 @@ import org.jetbrains.kotlin.name.FqName
 import org.jetbrains.kotlin.psi.KtClassOrObject
 import org.jetbrains.kotlin.resolve.DescriptorUtils
 
-internal open class KtLightClassForAnonymousDeclaration(name: FqName,
+internal open class KtLightClassForAnonymousDeclaration(name: FqName?,
+                                                        nameF: ((KtClassOrObject) -> FqName)?,
                                                         classOrObject: KtClassOrObject) :
-        KtLightClassForExplicitDeclaration(name, classOrObject), PsiAnonymousClass {
+        KtLightClassForExplicitDeclaration(name, nameF, classOrObject), PsiAnonymousClass {
 
     private var cachedBaseType: SoftReference<PsiClassType>? = null
 

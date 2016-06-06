@@ -53,10 +53,15 @@ import java.util.*
 import javax.swing.Icon
 
 open class KtLightClassForExplicitDeclaration(
-        protected val classFqName: FqName, // FqName of (possibly inner) class
+        private val classFqName_: FqName? = null,
+        private val classFqNameF_: ((KtClassOrObject) -> FqName)?,// FqName of (possibly inner) class
         protected val classOrObject: KtClassOrObject)
 : KtWrappingLightClass(classOrObject.manager), KtJavaMirrorMarker, StubBasedPsiElement<KotlinClassOrObjectStub<out KtClassOrObject>> {
     private val lightIdentifier = KtLightIdentifier(this, classOrObject)
+
+    protected val classFqName : FqName by lazy(LazyThreadSafetyMode.PUBLICATION) {
+        classFqName_ ?: classFqNameF_!!(classOrObject)
+    }
 
     private fun getLocalClassParent(): PsiElement? {
         fun getParentByPsiMethod(method: PsiMethod?, name: String?, forceMethodWrapping: Boolean): PsiElement? {
@@ -142,7 +147,7 @@ open class KtLightClassForExplicitDeclaration(
     override fun getFqName(): FqName = classFqName
 
     override fun copy(): PsiElement {
-        return KtLightClassForExplicitDeclaration(classFqName, classOrObject.copy() as KtClassOrObject)
+        return KtLightClassForExplicitDeclaration(classFqName, null, classOrObject.copy() as KtClassOrObject)
     }
 
     override val clsDelegate: PsiClass by lazy(LazyThreadSafetyMode.PUBLICATION) {
@@ -407,13 +412,12 @@ open class KtLightClassForExplicitDeclaration(
 
 
         fun create(classOrObject: KtClassOrObject): KtLightClassForExplicitDeclaration? {
-            val fqName = predictFqName(classOrObject) ?: return null
-
             if (classOrObject is KtObjectDeclaration && classOrObject.isObjectLiteral()) {
-                return KtLightClassForAnonymousDeclaration(fqName, classOrObject)
+                return KtLightClassForAnonymousDeclaration(null, { predictFqName(it) ?: FqName.ROOT }, classOrObject)
             }
 
-            return KtLightClassForExplicitDeclaration(fqName, classOrObject)
+            val fqName = predictFqName(classOrObject) ?: return null
+            return KtLightClassForExplicitDeclaration(fqName, null, classOrObject)
         }
 
         private fun predictFqName(classOrObject: KtClassOrObject): FqName? {
