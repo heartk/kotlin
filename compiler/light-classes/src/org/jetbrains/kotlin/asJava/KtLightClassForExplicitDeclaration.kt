@@ -222,12 +222,12 @@ open class KtLightClassForExplicitDeclaration(
 
         val aClass = other as KtLightClassForExplicitDeclaration
 
-        if (classFqName != aClass.classFqName) return false
-
-        return true
+        return classFqName == aClass.classFqName
     }
 
-    override fun hashCode(): Int = classFqName.hashCode()
+    override fun hashCode(): Int {
+        return classFqName.hashCode()
+    }
 
     override fun getContainingClass(): PsiClass? {
         if (classOrObject.parent === classOrObject.containingFile) return null
@@ -251,7 +251,9 @@ open class KtLightClassForExplicitDeclaration(
 
     override fun getTypeParameters(): Array<PsiTypeParameter> = _typeParameterList.typeParameters
 
-    override fun getName(): String = classFqName.shortName().asString()
+    override fun getName(): String? {
+        return classFqName.shortName().asString()
+    }
 
     override fun getQualifiedName(): String = classFqName.asString()
 
@@ -356,6 +358,7 @@ open class KtLightClassForExplicitDeclaration(
 
     override fun isInheritor(baseClass: PsiClass, checkDeep: Boolean): Boolean {
         val qualifiedName: String?
+
         if (baseClass is KtLightClassForExplicitDeclaration) {
             val baseDescriptor = baseClass.getDescriptor()
             qualifiedName = if (baseDescriptor != null) DescriptorUtils.getFqName(baseDescriptor).asString() else null
