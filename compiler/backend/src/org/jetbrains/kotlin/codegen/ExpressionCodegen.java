@@ -1683,7 +1683,7 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
     }
 
     @NotNull
-    private StackValue genCoroutineInstanceValueFromResolvedCall(ResolvedCall<?> resolvedCall) {
+    public StackValue genCoroutineInstanceValueFromResolvedCall(ResolvedCall<?> resolvedCall) {
         // Currently only handleResult/suspend members are supported
         ReceiverValue dispatchReceiver = resolvedCall.getDispatchReceiver();
         assert dispatchReceiver != null : "Dispatch receiver is null for handleResult/suspend to " + resolvedCall.getResultingDescriptor();
@@ -2606,7 +2606,7 @@ public class ExpressionCodegen extends KtVisitor<StackValue, StackValue> impleme
 
         if (isSuspensionPoint) {
             v.invokestatic(
-                    CoroutineCodegenUtilKt.SUSPENSION_POINT_MARKER_OWNER,
+                    CoroutineCodegenUtilKt.COROUTINE_MARKER_OWNER,
                     CoroutineCodegenUtilKt.SUSPENSION_POINT_MARKER_NAME, "()V", false);
         }
 
