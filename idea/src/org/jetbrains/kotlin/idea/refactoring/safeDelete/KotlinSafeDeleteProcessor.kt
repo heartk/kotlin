@@ -71,7 +71,9 @@ class KotlinSafeDeleteProcessor : JavaSafeDeleteProcessor() {
 
         fun findUsagesByJavaProcessor(element: PsiElement, forceReferencedElementUnwrapping: Boolean): NonCodeUsageSearchInfo? {
             val javaUsages = ArrayList<UsageInfo>()
-            val searchInfo = super.findUsages(element, allElementsToDelete, javaUsages)
+
+            val javaElementsToDelete = (allElementsToDelete.toSet() + element.toLightMethods()).toTypedArray()
+            val searchInfo = super.findUsages(element, javaElementsToDelete, javaUsages)
 
             javaUsages.filterIsInstance<SafeDeleteOverridingMethodUsageInfo>().mapNotNullTo(deleteSet) { it.element }
 
