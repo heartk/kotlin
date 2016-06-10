@@ -35,9 +35,10 @@ internal open class KtLightClassForAnonymousDeclaration(name: FqName,
         return JavaPsiFacade.getElementFactory(classOrObject.project).createReferenceElementByType(baseClassType)
     }
 
-    override fun getContainingClass(): PsiClass? {
-        return delegate.containingClass
-    }
+// TODO?
+//    override fun getContainingClass(): PsiClass? {
+//        return delegate.containingClass
+//    }
 
     private val firstSupertypeFQName: String
         get() {
@@ -111,6 +112,22 @@ internal open class KtLightClassForAnonymousDeclaration(name: FqName,
 
         return InheritanceImplUtil.isInheritor(this, baseClass, checkDeep);
     }
+
+    override fun getNameIdentifier() = null
+    override fun getQualifiedName(): String? = null
+    override fun getModifierList(): PsiModifierList? = null
+    override fun hasModifierProperty(name: String): Boolean = name == PsiModifier.FINAL
+    override fun getExtendsList(): PsiReferenceList? = null
+    override fun getImplementsList(): PsiReferenceList? = null
+    override fun getContainingClass(): PsiClass? = null
+    override fun isInterface(): Boolean = false
+    override fun isAnnotationType(): Boolean = false
+    override fun getTypeParameterList() = null
+
+// TODO?
+//    override fun isEnum(): Boolean {
+//        return false
+//    }
 
     companion object {
         private val LOG = Logger.getInstance(KtLightClassForAnonymousDeclaration::class.java)
