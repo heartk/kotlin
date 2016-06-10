@@ -297,12 +297,6 @@ public class PseudoValueTestGenerated extends AbstractPseudoValueTest {
                 doTest(fileName);
             }
 
-            @TestMetadata("getViaVar.kt")
-            public void testGetViaVar() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/cfg/conventions/getViaVar.kt");
-                doTest(fileName);
-            }
-
             @TestMetadata("incrementAtTheEnd.kt")
             public void testIncrementAtTheEnd() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/cfg/conventions/incrementAtTheEnd.kt");
@@ -318,12 +312,6 @@ public class PseudoValueTestGenerated extends AbstractPseudoValueTest {
             @TestMetadata("notEqual.kt")
             public void testNotEqual() throws Exception {
                 String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/cfg/conventions/notEqual.kt");
-                doTest(fileName);
-            }
-
-            @TestMetadata("setViaVar.kt")
-            public void testSetViaVar() throws Exception {
-                String fileName = KotlinTestUtils.navigationMetadata("compiler/testData/cfg/conventions/setViaVar.kt");
                 doTest(fileName);
             }
         }
